@@ -7,8 +7,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 public class ConvertBaseTenToBaseTwo {
+	
+	public static void main(String[] args) {
+		ConvertBaseTenToBaseTwo convert = new ConvertBaseTenToBaseTwo();
+		convert.ConvertBaseTenToBaseTwo();
+		
+	}
 
-	String ConvertBaseTenToBaseTwo(String NumberToConvert) {
+	void ConvertBaseTenToBaseTwo() {
 		File file = new File("unconverted.txt");
 		
 		Scanner input = null;
@@ -38,7 +44,7 @@ public class ConvertBaseTenToBaseTwo {
 
 		input.close(); // closes the scanner.
 		writer.close();
-		return NumberToConvert;
+	
 
 	}
 
