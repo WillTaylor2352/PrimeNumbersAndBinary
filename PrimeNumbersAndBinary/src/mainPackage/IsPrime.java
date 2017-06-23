@@ -2,7 +2,6 @@
  * @Author Ryan Bunker
  * IsPrime takes a BigInteger and checks to see if the number is a prime or not. If it is a prime it returns true if it is not prime then it returns false.
  */
-
 package mainPackage;
 
 import java.math.BigInteger;
