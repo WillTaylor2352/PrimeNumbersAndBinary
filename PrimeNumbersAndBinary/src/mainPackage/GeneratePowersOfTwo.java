@@ -8,7 +8,7 @@ import java.math.BigInteger;
 public class GeneratePowersOfTwo {
 	public static void main(String[] args) {
 		GeneratePowersOfTwo generate = new GeneratePowersOfTwo();
-		generate.GeneratePowersOfTwo(5500); //If this number is too large  the resulting file will be too big for notepad to open. 
+		generate.GeneratePowersOfTwo(4500); //If this number is too large  the resulting file will be too big for notepad to open. 
 		
 	}
 
