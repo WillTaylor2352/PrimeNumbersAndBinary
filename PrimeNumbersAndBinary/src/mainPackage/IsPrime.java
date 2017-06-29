@@ -10,20 +10,29 @@ public class IsPrime {
 
 	public static void main(String[] args) {
 		IsPrime test = new IsPrime();
-		System.out.println(IsPrime.isPrime(new BigInteger("13")));
-		System.out.println(IsPrime.isPrime(new BigInteger("12")));
+		IsPrime.isPrime(new BigInteger("13"));
+		IsPrime.isPrime(new BigInteger("12312312"));
+		IsPrime.isPrime(new BigInteger("0"));
 	}
 
 	public static boolean isPrime(BigInteger num) {
 		boolean truefalse = true;
 		BigInteger i = new BigInteger("0");
-		BigInteger two = new BigInteger("2"); // TODO: Find an alternative to this odd workaround
-		for (i = two; num.compareTo(i) > 0; i = i.add(BigInteger.ONE)) {
+		BigInteger two = new BigInteger("2");
 
+		if (num.equals(i)) {
+			truefalse = false;
+			System.out.print(truefalse + ": zero is not a prime number");
+			return truefalse;
+		}
+
+		for (i = two; num.compareTo(i) > 0; i = i.add(BigInteger.ONE)) {
 			if (num.mod(i) == BigInteger.ZERO) {
 				truefalse = false;
 			}
 		}
+
+		System.out.println(truefalse);
 		return truefalse;
 	}
 }

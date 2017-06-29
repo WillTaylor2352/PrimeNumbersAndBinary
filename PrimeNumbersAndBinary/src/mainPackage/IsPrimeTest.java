@@ -1,3 +1,8 @@
+/* @Author Ryan Bunker
+ * June 27, 2017
+ * A Junit test that test the IsPrime class
+ * 
+ */
 package mainPackage;
 
 import static org.junit.Assert.*;
@@ -17,25 +22,22 @@ public class IsPrimeTest {
 	private String numA;
 	private boolean expected;
 
-	public void IsPrimeTest(String numA, boolean expected) {
+	public IsPrimeTest(String numA, boolean expected) {
 
 		this.numA = numA;
 		this.expected = expected;
 
-		/*
-		 * IsPrime test = new IsPrime(); boolean result = IsPrime.isPrime(new
-		 * BigInteger("13"));
-		 * 
-		 * assertTrue(result);
-		 */
 	}
 
 	@Parameters
-	public static Collection<Object[]> data(){
+	public static Collection<Object[]> data(){ 
 		return Arrays.asList(new Object[][]{
-			{"13", true}
-			
-			
+			{"13", true},
+			{"12", false},
+			{"-13", true},
+			{"12312312", false},
+			{"2147483647", true},
+			{"0", false} //zero is not a prime number
 		});
 	}
 
