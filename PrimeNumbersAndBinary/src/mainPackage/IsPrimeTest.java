@@ -32,12 +32,12 @@ public class IsPrimeTest {
 	@Parameters
 	public static Collection<Object[]> data(){ 
 		return Arrays.asList(new Object[][]{
-			{"13", true},
-			{"12", false},
-			{"-13", true},
-			{"12312312", false},
-			{"2147483647", true},
-			{"0", false} //zero is not a prime number
+			{"13", true}, //Original code : 0 seconds. Modified code: 0
+			{"12", false},//Original code : 0 seconds. Modified code: 0
+			{"-13", true},//Original code : 0 seconds. Modified code: 0
+			{"12312312", false},//Original code : 1 seconds. Modified code: 0
+			{"2147483647", true},//Original code : 204 seconds. Modified code: 103
+			{"0", false} //zero is not a prime number. /
 		});
 	}
 
