@@ -21,23 +21,37 @@ public class IsPrime {
 	}
 
 	public static boolean isPrime(BigInteger num) {
+		long timerStart = System.currentTimeMillis();
+		long timerEnd;
 		boolean truefalse = true;
 		BigInteger i = new BigInteger("0");
 		BigInteger two = new BigInteger("2");
+		BigInteger three = new BigInteger("3");
+		
+		BigIntegerSqrt BIsqrt = new BigIntegerSqrt();
+		
 
 		if (num.equals(i)) {
 			truefalse = false;
-			System.out.print(truefalse + ": zero is not a prime number");
+			timerEnd = System.currentTimeMillis();
+			System.out.println(truefalse + ": zero is not a prime number: " + (timerEnd - timerStart) + " millisecs" );
+			return truefalse;
+		}
+		if (num.mod(two) == BigInteger.ZERO){
+			timerEnd = System.currentTimeMillis();
+			System.out.println(truefalse + ":" + (timerEnd - timerStart) + " millisecs" );
+			truefalse = false;
 			return truefalse;
 		}
 
-		for (i = two; num.compareTo(i) > 0; i = i.add(BigInteger.ONE)) {
+		for (i = three; num.compareTo(i.multiply(i)) > 0; i = i.add(two)) {
 			if (num.mod(i) == BigInteger.ZERO) {
 				truefalse = false;
 			}
 		}
-
-		System.out.println(truefalse);
+		timerEnd = System.currentTimeMillis();
+		System.out.println(truefalse + ": " + ((timerEnd - timerStart) / 1000) + " secs" );
+		
 		return truefalse;
 	}
 }

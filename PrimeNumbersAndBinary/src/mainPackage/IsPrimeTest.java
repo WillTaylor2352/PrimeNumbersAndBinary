@@ -36,8 +36,17 @@ public class IsPrimeTest {
 			{"12", false},//Original code : 0 seconds. Modified code: 0
 			{"-13", true},//Original code : 0 seconds. Modified code: 0
 			{"12312312", false},//Original code : 1 seconds. Modified code: 0
-			{"2147483647", true},//Original code : 204 seconds. Modified code: 103
-			{"0", false} //zero is not a prime number. /
+			{"2147483647", true},//Original code : 204 seconds. Modified code: 0 secs
+			{"0", false}, //zero is not a prime number. 
+			{"179424691", true}, //Modified code: 0secs
+			{"32416190071", true},//Modified code: 0secs
+			{"32416190039", true},//Modified code: 0secs
+			{"32416189987", true},//Modified code: 0secs
+			{"32416189919", true},//Modified code: 0secs
+			{"32416189681", true},//Modified code: 0secs
+			{"32416188949", true},//Modified code: 0secs
+			{"32416187701", true},//Modified code: 0secs
+			{"982451653 ", true} // 0 Secs
 		});
 	}
 
