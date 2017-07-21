@@ -1,5 +1,5 @@
 /*
- * Code was written by user JochemKuipers on GitHubGist
+ * Code was written by user JochemKuijpers on GitHubGist
  * URL: https://gist.github.com/JachemKuijpers/cd1ad9ec23d6d90959c549de5892d6cb
  * This code finds the square root a  number stored within a Big Integer
  */

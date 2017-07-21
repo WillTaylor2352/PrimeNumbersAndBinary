@@ -10,9 +10,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import primeNumberProtocols.PrimeNumberProtocol;
 
 public class Listener extends Thread {
 	private int port;
@@ -33,12 +37,11 @@ public class Listener extends Thread {
 	public void run() {
 		BufferedReader in;
         ServerSocket myServerSocket = null;  // A listener
-        String msg = null;
         while (true) {
             try {
             	// It's probably not open, but try to close it anyway.
                 try {myServerSocket.close();} catch(Exception ex){}
-//    	        Grab the port. 
+//    	        Grab the port.
                 myServerSocket = new ServerSocket(port); // bind to the port
             } catch (Exception ex) {
                 System.out.println("run new ServerSocket: " + ex.getMessage());
@@ -70,22 +73,63 @@ public class Listener extends Thread {
             ObjectInputStream ois = null;
             try {
             	ois = new ObjectInputStream(clientSocket.getInputStream());
-        		System.out.println("Waiting for incoming messages...");
+            	ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
+            	System.out.println("Waiting for incoming messages...");
+        		PrimeNumberProtocol pnp = null;
             	while (true) {
-           			try {msg = (String) ois.readObject();} catch (Exception ex) {}
-            		if (msg != null && !(msg.equals(""))) System.out.println("Incoming message = " + msg);
-            		//out.write("OK");
-            		if (msg.equals("Quit")) {
-            			try {myServerSocket.close();} catch (Exception ex){}	// eat it
-            			break;
+           			try {pnp = (PrimeNumberProtocol) ois.readObject();} catch (Exception ex) {}
+            		if (pnp != null) {
+            			checkMessage(pnp, oos);
             		}
-            		msg = "";
-                	//ois = new ObjectInputStream(clientSocket.getInputStream()); 
             	}
             } catch (Exception ex) {
-            	System.out.println("Error reading message from remote host: " + ex.getLocalizedMessage());	
+            	System.out.println("Error reading message from remote host: " + ex.getLocalizedMessage());
     			try {myServerSocket.close();} catch (IOException e) {} // eat it
     		}
         }
     }
+	/**
+	 * Process a message received from a the sender. The message is a PrimeNumberProtocol object
+	 * @param pnp
+	 * @throws Exception
+	 */
+	private void checkMessage(PrimeNumberProtocol pnp,  ObjectOutputStream oos) throws Exception {
+		System.out.println("Listener: Prime Number Protocol message received");
+		switch (pnp.getStatus()) {
+			case HERE_IS_A_MESSAGE_FOR_YOU:
+				System.out.println("Listener.CheckMessage(): Message = " + pnp.getMessage());
+				break;
+			case SEND_ME_A_NUMBER_TO_CHECK:
+				System.out.println("Requesting a number to check");
+				// TODO: send a PrimeNumberProtocol object back to the sender, with a BigInteger to be checked for primeness. Be sure to set the enumStatus value correctly. Look at the sendMessage method, below.
+				break;
+			case CHECK_THIS_NUMBER:
+				System.out.println("Sending us a number to check: " + pnp.getNumber().toString());
+				// This should not happen here. The Sender should not be sending a number to the listener.
+				throw new Exception("Listener.checkMessage(): Unexpected message: CHECK_THIS_NUMBER");
+				//break;
+			case THIS_NUMBER_HAS_BEEN_CHECKED:
+				System.out.println("Listener.checkMessage(): Confirming the number has been checked");
+				System.out.println("result = " + pnp.getResultOfPrimeNumberCheck());
+				break;
+			case ERROR:
+				System.out.println("Listener.checkMessage(): Error");
+				break;
+			default:
+				System.out.println("Listener.checkMessage():: Unrecognized status message: " + pnp.getStatus());
+				break;
+		}
+	}
+	private void sendMessage(ObjectOutputStream oos) {
+		PrimeNumberProtocol pnp = new PrimeNumberProtocol();
+		BigInteger bi = new BigInteger("12345");
+		pnp.setNumber(bi);
+		pnp.setStatus(PrimeNumberProtocol.enumStatus.CHECK_THIS_NUMBER);
+		try {
+			oos.writeObject(pnp);
+		} catch (IOException e) {
+			System.out.println("Sende.sendMessage(): " + e.getLocalizedMessage());
+		}
+	}
+
 }
