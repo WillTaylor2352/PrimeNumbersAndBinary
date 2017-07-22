@@ -14,7 +14,6 @@ import java.math.BigInteger;
 public class IsPrime {
 
 	public static void main(String[] args) {
-		IsPrime test = new IsPrime();
 		IsPrime.isPrime(new BigInteger("13"));
 		IsPrime.isPrime(new BigInteger("12312312"));
 		IsPrime.isPrime(new BigInteger("0"));
@@ -28,7 +27,6 @@ public class IsPrime {
 		BigInteger two = new BigInteger("2");
 		BigInteger three = new BigInteger("3");
 		
-		BigIntegerSqrt BIsqrt = new BigIntegerSqrt();
 		
 
 		if (num.equals(i)) {

@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import mainPackage.IsPrime;
 import primeNumberProtocols.PrimeNumberProtocol;
 
 public class Sender extends Thread {
@@ -113,7 +114,17 @@ public class Sender extends Thread {
 				throw new Exception("Sender.checkMessage(): Unexpected message: SEND_ME_A_NUMBER_TO_CHECK");
 				//break;
 			case CHECK_THIS_NUMBER:
-				// TODO: Check the BigInteger in the message, then send a response back to the Listener. Look at the SendMessage method in the Listener class for sampe code to send a message
+				// TODO: Check the BigInteger in the message, then send a response back to the Listener. Look at the SendMessage method in the Listener class for sample code to send a message
+				
+				pnp.setResultOfPrimeNumberCheck(IsPrime.isPrime(pnp.getNumber()));
+				pnp.setStatus(PrimeNumberProtocol.enumStatus.THIS_NUMBER_HAS_BEEN_CHECKED);
+				
+				oos.writeObject(pnp);
+				
+			
+			
+		
+				
 				break;
 			case THIS_NUMBER_HAS_BEEN_CHECKED:
 				// This should not happen here. The Listener should not be sending a confirmation to the Sender
