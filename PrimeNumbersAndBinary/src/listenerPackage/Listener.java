@@ -83,7 +83,7 @@ public class Listener extends Thread {
             		}
             	}
             } catch (Exception ex) {
-            	System.out.println("Error reading message from remote host: " + ex.getLocalizedMessage());
+            	System.out.println("Listener.run(): Error reading message from remote host: " + ex.getLocalizedMessage());
     			try {myServerSocket.close();} catch (IOException e) {} // eat it
     		}
         }
@@ -136,7 +136,7 @@ public class Listener extends Thread {
 		try {
 			oos.writeObject(pnp);
 		} catch (IOException e) {
-			System.out.println("Sende.sendMessage(): " + e.getLocalizedMessage());
+			System.out.println("Listener.sendMessage(): " + e.getLocalizedMessage());
 		}
 	}
 
