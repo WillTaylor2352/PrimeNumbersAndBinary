@@ -74,7 +74,7 @@ public class Listener extends Thread {
             try {
             	ois = new ObjectInputStream(clientSocket.getInputStream());
             	ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
-            	System.out.println("Listener: Waiting for an incoming message...");
+            	System.out.println("Listener.run(): Waiting for an incoming message...");
         		PrimeNumberProtocol pnp = null;
             	while (true) {
            			try {pnp = (PrimeNumberProtocol) ois.readObject();} catch (Exception ex) {}
@@ -94,13 +94,13 @@ public class Listener extends Thread {
 	 * @throws Exception
 	 */
 	private void checkMessage(PrimeNumberProtocol pnp,  ObjectOutputStream oos) throws Exception {
-		System.out.println("Listener: Prime Number Protocol message received");
+		System.out.println("Listener.checkMessage(): Prime Number Protocol message received");
 		switch (pnp.getStatus()) {
 			case HERE_IS_A_MESSAGE_FOR_YOU:
 				System.out.println("Listener.CheckMessage(): Message = " + pnp.getMessage());
 				break;
 			case SEND_ME_A_NUMBER_TO_CHECK:
-				System.out.println("Requesting a number to check");
+				System.out.println("Listener.checkMessage(): Received request for a number to check");
 				// TODO: send a PrimeNumberProtocol object back to the sender, with a BigInteger to be checked for primeness. Be sure to set the enumStatus value correctly. Look at the sendMessage method, below.
 				BigInteger bi = new BigInteger("13");
 				pnp.setNumber(bi);
@@ -108,7 +108,7 @@ public class Listener extends Thread {
 				try{
 					oos.writeObject(pnp);
 				}catch(IOException e){
-					System.out.println("Sende.sendMessage(): " + e.getLocalizedMessage());
+					System.out.println("Listener.checkMessage(): " + e.getLocalizedMessage());
 				}
 				break;
 			case CHECK_THIS_NUMBER:
