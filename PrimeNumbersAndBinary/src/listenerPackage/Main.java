@@ -8,9 +8,7 @@ public class Main {
 				//	((Listener)(new Listener(100+i,"Hoosier"))).start();
 				//}
 		System.out.println("Starting listener...");
-		Listener listener = new Listener(8000, "Hoosier");
+		Listener listener = new Listener(8000, "Hoosier", false);
 		listener.start();
-
 	}
 }
-

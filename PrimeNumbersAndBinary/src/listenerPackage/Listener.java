@@ -20,6 +20,7 @@ import primeNumberProtocols.PrimeNumberProtocol;
 
 public class Listener extends Thread {
 	private int port;
+	private Boolean debug;
 	private Socket clientSocket;
 	PrintWriter out;
 	String name;		// A semantic name so we have something to play with
@@ -27,14 +28,16 @@ public class Listener extends Thread {
 	 * Constructor
 	 * @param port The port number to listen on
 	 */
-	public Listener(int port, String name) {
+	public Listener(int port, String name, Boolean debug) {
 		this.port = port;
 		this.name = name;
+		this.debug = debug;
 	}
 	/**
 	 * The entry point for the thread
 	 */
 	public void run() {
+		printMessage(name + ": Listener.run()...");
 		BufferedReader in;
         ServerSocket myServerSocket = null;  // A listener
         while (true) {
@@ -44,7 +47,7 @@ public class Listener extends Thread {
 //    	        Grab the port.
                 myServerSocket = new ServerSocket(port); // bind to the port
             } catch (Exception ex) {
-                System.out.println("run new ServerSocket: " + ex.getMessage());
+            	printMessage(name + ": Listener.run(): new ServerSocket: " + ex.getMessage());
                 continue;
             }
             try {
@@ -54,19 +57,19 @@ public class Listener extends Thread {
                 clientSocket = myServerSocket.accept();       // Wait for a client
             } catch (Exception ex) {
 //	        	The accept() timed out. The loop will start over.
-                //System.out.println(name + ": Connection timeout. " + ex.getLocalizedMessage());
+            	printMessage(name + ": Listener.run(): Connection timeout. " + ex.getLocalizedMessage());
             	try {myServerSocket.close();} catch (IOException e) {
             		continue;
             	}
             	continue;
             }
 //			If we get this far, we have accepted a connection from another host.
-            System.out.println(name + ": Connection recieved from " + clientSocket.getRemoteSocketAddress());
+            printMessage(name + ": Listener.run() : Connection recieved from " + clientSocket.getRemoteSocketAddress());
             try {
 	            out = new PrintWriter(clientSocket.getOutputStream(), true);
 	            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             } catch (Exception ex) {
-                System.out.println(name + ": Unable to open streams on the socket: " + ex.getLocalizedMessage());
+            	printMessage(name + ": Listener.run(): Unable to open streams on the socket: " + ex.getLocalizedMessage());
             	continue;
             }
             //out.write("Connection received. Welcome to " + name + ". Type Quit when finished.");
@@ -74,16 +77,17 @@ public class Listener extends Thread {
             try {
             	ois = new ObjectInputStream(clientSocket.getInputStream());
             	ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
-            	System.out.println("Listener.run(): Waiting for an incoming message...");
+            	printMessage(name + ": Listener.run(): Waiting for an incoming message...");
         		PrimeNumberProtocol pnp = null;
             	while (true) {
            			try {pnp = (PrimeNumberProtocol) ois.readObject();} catch (Exception ex) {}
             		if (pnp != null) {
+            			printMessage(name + ": Listener.run(): Message received.");
             			checkMessage(pnp, oos);
             		}
             	}
             } catch (Exception ex) {
-            	System.out.println("Listener.run(): Error reading message from remote host: " + ex.getLocalizedMessage());
+            	printMessage(name + ": Listener.run(): Error reading message from remote host: " + ex.getLocalizedMessage());
     			try {myServerSocket.close();} catch (IOException e) {} // eat it
     		}
         }
@@ -94,37 +98,37 @@ public class Listener extends Thread {
 	 * @throws Exception
 	 */
 	private void checkMessage(PrimeNumberProtocol pnp,  ObjectOutputStream oos) throws Exception {
-		System.out.println("Listener.checkMessage(): Prime Number Protocol message received");
+		printMessage("Listener.checkMessage(): Prime Number Protocol message received");
 		switch (pnp.getStatus()) {
 			case HERE_IS_A_MESSAGE_FOR_YOU:
-				System.out.println("Listener.CheckMessage(): Message = " + pnp.getMessage());
+				printMessage(name + ": Listener.CheckMessage(): Message = " + pnp.getMessage());
 				break;
 			case SEND_ME_A_NUMBER_TO_CHECK:
-				System.out.println("Listener.checkMessage(): Received request for a number to check");
-				// TODO: send a PrimeNumberProtocol object back to the sender, with a BigInteger to be checked for primeness. Be sure to set the enumStatus value correctly. Look at the sendMessage method, below.
+				printMessage(name + ": Listener.checkMessage(): Received request for a number to check");
+				// TODO: send a different number the second time, etc. We also need logic to handle multiple senders.
 				BigInteger bi = new BigInteger("13");
 				pnp.setNumber(bi);
 				pnp.setStatus(PrimeNumberProtocol.enumStatus.CHECK_THIS_NUMBER);
 				try{
 					oos.writeObject(pnp);
 				}catch(IOException e){
-					System.out.println("Listener.checkMessage(): " + e.getLocalizedMessage());
+					printMessage(name + ": Listener.checkMessage(): " + e.getLocalizedMessage());
 				}
 				break;
 			case CHECK_THIS_NUMBER:
-				System.out.println("Sending us a number to check: " + pnp.getNumber().toString());
+				printMessage(name + ": Listener.checkMessage(): Sending us a number to check: " + pnp.getNumber().toString());
 				// This should not happen here. The Sender should not be sending a number to the listener.
-				throw new Exception("Listener.checkMessage(): Unexpected message: CHECK_THIS_NUMBER");
+				throw new Exception(name + ": Listener.checkMessage(): Unexpected message: CHECK_THIS_NUMBER");
 				//break;
 			case THIS_NUMBER_HAS_BEEN_CHECKED:
-				System.out.println("Listener.checkMessage(): Confirming the number has been checked");
-				System.out.println("result = " + pnp.getResultOfPrimeNumberCheck());
+				printMessage(name + ": Listener.checkMessage(): Confirming the number has been checked");
+				printMessage("result = " + pnp.getResultOfPrimeNumberCheck());
 				break;
 			case ERROR:
-				System.out.println("Listener.checkMessage(): Error");
+				printMessage(name + ": Listener.checkMessage(): Error");
 				break;
 			default:
-				System.out.println("Listener.checkMessage():: Unrecognized status message: " + pnp.getStatus());
+				printMessage(name + ": Listener.checkMessage(): Unrecognized status message: " + pnp.getStatus());
 				break;
 		}
 	}
@@ -136,11 +140,12 @@ public class Listener extends Thread {
 		try {
 			oos.writeObject(pnp);
 		} catch (IOException e) {
-			System.out.println("Listener.sendMessage(): " + e.getLocalizedMessage());
+			printMessage(name + ": Listener.sendMessage(): " + e.getLocalizedMessage());
 		}
 	}
-
-
-
-
+	private void printMessage(String message) {
+		if (debug == true) {
+			System.out.println(message);
+		}
+	}
 }
