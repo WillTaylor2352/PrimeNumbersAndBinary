@@ -7,6 +7,8 @@
 package senderPackage;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -116,15 +118,15 @@ public class Sender extends Thread {
 			case CHECK_THIS_NUMBER:
 				// TODO: Check the BigInteger in the message, then send a response back to the Listener. Look at the SendMessage method in the Listener class for sample code to send a message
 				
-				pnp.setResultOfPrimeNumberCheck(IsPrime.isPrime(pnp.getNumber()));
-				pnp.setStatus(PrimeNumberProtocol.enumStatus.THIS_NUMBER_HAS_BEEN_CHECKED);
-				
-				oos.writeObject(pnp);
-				
-			
-			
-		
-				
+				pnp.setResultOfPrimeNumberCheck(IsPrime.isPrime(pnp.getNumber())); //uses the isprime method of the isPrime class to see if a number is prime or not. Then, within the pnp, it sets either true or false the ResultOfPrimeNumberCheck 
+				pnp.setStatus(PrimeNumberProtocol.enumStatus.THIS_NUMBER_HAS_BEEN_CHECKED); //sets the status of  pnp to refelct that the number has been checked
+				try {
+					oos.writeObject(pnp);
+					break;
+				} catch (IOException e) {
+					System.out.println("Sende.sendMessage(): " + e.getLocalizedMessage());
+				}
+				System.out.println("This number has been checked for primeness.");
 				break;
 			case THIS_NUMBER_HAS_BEEN_CHECKED:
 				// This should not happen here. The Listener should not be sending a confirmation to the Sender

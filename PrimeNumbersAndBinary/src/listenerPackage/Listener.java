@@ -102,8 +102,14 @@ public class Listener extends Thread {
 			case SEND_ME_A_NUMBER_TO_CHECK:
 				System.out.println("Requesting a number to check");
 				// TODO: send a PrimeNumberProtocol object back to the sender, with a BigInteger to be checked for primeness. Be sure to set the enumStatus value correctly. Look at the sendMessage method, below.
-				
-				
+				BigInteger bi = new BigInteger("13"); 
+				pnp.setNumber(bi);
+				pnp.setStatus(PrimeNumberProtocol.enumStatus.CHECK_THIS_NUMBER);
+				try{
+					oos.writeObject(pnp);
+				}catch(IOException e){
+					System.out.println("Sende.sendMessage(): " + e.getLocalizedMessage());
+				}
 				break;
 			case CHECK_THIS_NUMBER:
 				System.out.println("Sending us a number to check: " + pnp.getNumber().toString());
