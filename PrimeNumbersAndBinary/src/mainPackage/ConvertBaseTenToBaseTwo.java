@@ -1,5 +1,6 @@
 /*
- * Don't know who wrote this
+ * @Author: Ryan Bunker
+ * This class will take base10 numbers that are in a file, convert them into base2 and then put them in a file called PrimeNumbersConverted.txt.
  */
 package mainPackage;
 

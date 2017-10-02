@@ -54,9 +54,9 @@ public class Listener extends Thread {
 //	            Listen for a connection request. If the request doesn't come
 //	              within 2 seconds, this accept() will time out and throw an exception.
                 myServerSocket.setSoTimeout(2000);            // Wait 2 second, then unblock
-                clientSocket = myServerSocket.accept();       // Wait for a clientz
-                Thread myThread = new Thread ((Runnable) clientSocket);
-                myThread.start();
+                clientSocket = myServerSocket.accept();       // Wait for a client
+                Thread myThread = new Thread ((Runnable) clientSocket); //this will create a thread called my thread that takes the client socket as an argument.
+                myThread.start(); //this will start the thread that has the clientsocket in it.  Hopefully this will create a thread that handles the clientsocket and this code hopefully allows us to run more threads with more connections.
             } catch (Exception ex) {
 //	        	The accept() timed out. The loop will start over.
             	printMessage(name + ": Listener.run(): Connection timeout. " + ex.getLocalizedMessage());

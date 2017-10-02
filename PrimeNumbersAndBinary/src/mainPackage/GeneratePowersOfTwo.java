@@ -1,3 +1,4 @@
+//This class will generate powers of two and put them into a file called PowerOfTwo.Txt. If i remember correctly this code is not implemented anywhere else.
 package mainPackage;
 
 import java.io.FileNotFoundException;

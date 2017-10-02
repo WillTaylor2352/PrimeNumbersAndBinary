@@ -1,3 +1,6 @@
+/*
+ * A class called biil. 
+ */
 package mainPackage;
 
 public class Bill {
