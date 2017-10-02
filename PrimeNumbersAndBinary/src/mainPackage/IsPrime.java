@@ -48,7 +48,7 @@ public class IsPrime {
 			}
 		}
 		timerEnd = System.currentTimeMillis();
-		System.out.println(truefalse + ": " + ((timerEnd - timerStart) / 1000) + " secs" );
+		System.out.println(truefalse + ": " + ((timerEnd - timerStart) / 1000) + " secs " + num );
 		
 		return truefalse;
 	}

@@ -54,7 +54,9 @@ public class Listener extends Thread {
 //	            Listen for a connection request. If the request doesn't come
 //	              within 2 seconds, this accept() will time out and throw an exception.
                 myServerSocket.setSoTimeout(2000);            // Wait 2 second, then unblock
-                clientSocket = myServerSocket.accept();       // Wait for a client
+                clientSocket = myServerSocket.accept();       // Wait for a clientz
+                Thread myThread = new Thread ((Runnable) clientSocket);
+                myThread.start();
             } catch (Exception ex) {
 //	        	The accept() timed out. The loop will start over.
             	printMessage(name + ": Listener.run(): Connection timeout. " + ex.getLocalizedMessage());
@@ -106,7 +108,8 @@ public class Listener extends Thread {
 			case SEND_ME_A_NUMBER_TO_CHECK:
 				printMessage(name + ": Listener.checkMessage(): Received request for a number to check");
 				// TODO: send a different number the second time, etc. We also need logic to handle multiple senders.
-				BigInteger bi = new BigInteger("13");
+				BigInteger bi = new BigInteger("12");
+				//bi = pnp.getNumber();
 				pnp.setNumber(bi);
 				pnp.setStatus(PrimeNumberProtocol.enumStatus.CHECK_THIS_NUMBER);
 				try{
@@ -134,7 +137,7 @@ public class Listener extends Thread {
 	}
 	private void sendMessage(ObjectOutputStream oos) {
 		PrimeNumberProtocol pnp = new PrimeNumberProtocol();
-		BigInteger bi = new BigInteger("12345");
+		BigInteger bi = new BigInteger("1545456546842345");
 		pnp.setNumber(bi);
 		pnp.setStatus(PrimeNumberProtocol.enumStatus.CHECK_THIS_NUMBER);
 		try {

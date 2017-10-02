@@ -127,6 +127,7 @@ public class Sender extends Thread {
 				System.out.println("Sender.checkMessage(): Received a number to check...");
 				pnp.setResultOfPrimeNumberCheck(IsPrime.isPrime(pnp.getNumber())); //uses the isprime method of the isPrime class to see if a number is prime or not. Then, within the pnp, it sets either true or false the ResultOfPrimeNumberCheck
 				pnp.setStatus(PrimeNumberProtocol.enumStatus.THIS_NUMBER_HAS_BEEN_CHECKED); //sets the status of  pnp to refelct that the number has been checked
+				pnp.setNumber(pnp.getNumber().add(BigInteger.ONE));
 				try {
 					oos.writeObject(pnp);
 					break;
@@ -134,6 +135,7 @@ public class Sender extends Thread {
 					System.out.println("Sender.checkMessage(): " + e.getLocalizedMessage());
 				}
 				System.out.println("Sender.checkMessage: This number has been checked for primeness.");
+				
 				break;
 			case THIS_NUMBER_HAS_BEEN_CHECKED:
 				// This should not happen here. The Listener should not be sending a confirmation to the Sender
